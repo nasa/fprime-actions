@@ -21,6 +21,7 @@ runs:
       location: "${{ inputs.location }}"
 
   - name: Verify compiler is in PATH
+    shell: bash
     run: |
       which aarch64-none-linux-gnu-gcc
       aarch64-none-linux-gnu-gcc -v
@@ -29,6 +30,7 @@ runs:
     uses: nasa/fprime-actions/setup@devel
 
   - name: Cross compile
+    shell: bash
     run: |
       fprime-util generate aarch64-linux
       fprime-util build aarch64-linux
