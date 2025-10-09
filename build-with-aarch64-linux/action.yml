@@ -1,0 +1,35 @@
+name: 'Build with aarch64-linux toolchain'
+description: 'Build the aarch64-linux toolchain'
+inputs:
+  location:
+    required: false
+    default: /tmp/toolchain
+    description: "Installation path for the toolchain"
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: Checkout repo
+    uses: actions/checkout@v4
+    with:
+      submodules: recursive
+
+  - name: Setup cross-compiler
+    uses: kevin-f-ortega/fprime-actions/setup-aarch64-toolchain@aarch64-linux-cross-compile
+    with:
+      location: "${{ inputs.location }}"
+
+  - name: Verify compiler is in PATH
+    run: |
+      which aarch64-none-linux-gnu-gcc
+      aarch64-none-linux-gnu-gcc -v
+
+  - name: Set up F Prime
+    uses: nasa/fprime-actions/setup@devel
+
+  - name: Cross compile
+    run: |
+      fprime-util generate aarch64-linux
+      fprime-util build aarch64-linux
+
