@@ -16,7 +16,7 @@ runs:
       submodules: recursive
 
   - name: Setup cross-compiler
-    uses: nasa/fprime-actions/setup-aarch64-toolchain@aarch64-linux-cross-compile
+    uses: nasa/fprime-actions/setup-aarch64-toolchain@devel
     with:
       location: "${{ inputs.location }}"
 
