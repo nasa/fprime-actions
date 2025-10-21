@@ -5,6 +5,9 @@ inputs:
     required: false
     default: /tmp/toolchain
     description: "Installation path for the toolchain"
+  toolchain-url:
+    required: true
+    description: URL to the aarch64 toolchain tarball.
 
 runs:
   using: "composite"
@@ -14,7 +17,14 @@ runs:
     run: |
       set -e
       mkdir -p "${{ inputs.location }}"
-      curl -Ls https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz | tar -JC "${{ inputs.location }}" --strip-components=1 -x
+      curl -Ls "${{ inputs.toolchain-url }}" | tar -JC "${{ inputs.location }}" --strip-components=1 -x
       "${{ inputs.location }}/bin/aarch64-none-linux-gnu-gcc" -v
       export "ARM_TOOLS_PATH=${{ inputs.location }}" >> $GITHUB_ENV
       echo "${{ inputs.location }}/bin" >> $GITHUB_PATH
+
+  - name: Verify compiler is in PATH
+    shell: bash
+    run: |
+      which aarch64-none-linux-gnu-gcc
+      aarch64-none-linux-gnu-gcc -v
+

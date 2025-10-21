@@ -5,29 +5,20 @@ inputs:
     required: false
     default: /tmp/toolchain
     description: "Installation path for the toolchain"
+  toolchain-url:
+    required: false
+    default: https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
+    description: URL to the aarch64 toolchain tarball.
 
 runs:
   using: "composite"
   steps:
 
-  - name: Checkout repo
-    uses: actions/checkout@v4
-    with:
-      submodules: recursive
-
   - name: Setup cross-compiler
     uses: nasa/fprime-actions/setup-aarch64-toolchain@devel
     with:
       location: "${{ inputs.location }}"
-
-  - name: Verify compiler is in PATH
-    shell: bash
-    run: |
-      which aarch64-none-linux-gnu-gcc
-      aarch64-none-linux-gnu-gcc -v
-
-  - name: Set up F Prime
-    uses: nasa/fprime-actions/setup@devel
+      toolchain-url: "${{ inputs.toolchain-url }}"
 
   - name: Cross compile
     shell: bash
