@@ -9,10 +9,6 @@ inputs:
     description: "Default branch to use if no PR branch found"
     required: false
     default: "devel"
-  github-token:
-    description: "GitHub token used to authenticate branch lookups. Optional."
-    required: false
-    default: ""
 
 outputs:
   target-branch:
@@ -24,7 +20,7 @@ runs:
   steps:
     - name: "Get PR target branch"
       id: get_pr_branch
-      uses: nasa/fprime-actions/get-pr-branch@use-token-for-limits
+      uses: nasa/fprime-actions/get-pr-branch@devel
       with:
         target_repository: ${{ inputs.repository }}
         default_target_ref: ${{ inputs.default-branch }}
